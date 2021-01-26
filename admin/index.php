@@ -1,17 +1,22 @@
 <?php
-// include 'koneksi.php';
 session_start();
 if ($_SESSION['status'] != "login") {
     header("location:../index.php?pesan=belum_login");
 }
-$conn = mysqli_connect("localhost", "root", "", "pal_test");
-//$kontak = query("SELECT * FROM contact");
-$result = mysqli_query($conn, "SELECT * FROM contact");
+$conn = mysqli_connect("localhost", "root", "", "rnd_notif");
+$result = mysqli_query($conn, "SELECT * FROM project");
+$query = "SELECT p.project_name,e.name,c.email,c.whatsapp,c.telegram FROM project as p 
+RIGHT JOIN project_employees as pe ON p.id_project = pe.id_project 
+LEFT JOIN employee as e ON pe.id_emp = e.id_emp 
+LEFT JOIN contact as c ON c.id_contact=e.id_contact";
+$result1 = mysqli_query($conn, $query);
 
-// while ($kontak = mysqli_fetch_object($result)) {
-//     var_dump($kontak);
-// };
+// while ($getEmail = mysqli_fetch_assoc($result2)) {
+//     var_dump($getEmail);
+// }
+// 
 ?>
+
 <!DOCTYPE html>
 <html>
 
@@ -45,13 +50,10 @@ $result = mysqli_query($conn, "SELECT * FROM contact");
 
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
-
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand bg-white navbar-light border-bottom">
-
         </nav>
         <!-- /.navbar -->
-
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
@@ -59,90 +61,21 @@ $result = mysqli_query($conn, "SELECT * FROM contact");
                 <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="brand-text font-weight-light">AdminLTE 3</span>
             </a>
-
             <!-- Sidebar -->
             <div class="sidebar">
-                <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
                         <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
                         <a href="#" class="d-block">
-                            <?php echo $_SESSION['email'];
+                            <?php echo $_SESSION['username'];
                             ?></a>
                     </div>
                 </div>
-
-                <!-- Sidebar Menu -->
-                <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-                        <li class="nav-item has-treeview menu-open">
-                            <a href="#" class="nav-link active">
-                                <i class="nav-icon fa fa-dashboard"></i>
-                                <p>
-                                    Dashboard
-                                    <i class="right fa fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="./index.html" class="nav-link active">
-                                        <i class="fa fa-circle-o nav-icon"></i>
-                                        <p>Dashboard v1</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fa fa-book"></i>
-                                <p>
-                                    Pages
-                                    <i class="fa fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="pages/examples/invoice.html" class="nav-link">
-                                        <i class="fa fa-circle-o nav-icon"></i>
-                                        <p>Invoice</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="pages/examples/profile.html" class="nav-link">
-                                        <i class="fa fa-circle-o nav-icon"></i>
-                                        <p>Profile</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="pages/examples/login.html" class="nav-link">
-                                        <i class="fa fa-circle-o nav-icon"></i>
-                                        <p>Login</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="pages/examples/register.html" class="nav-link">
-                                        <i class="fa fa-circle-o nav-icon"></i>
-                                        <p>Register</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="pages/examples/lockscreen.html" class="nav-link">
-                                        <i class="fa fa-circle-o nav-icon"></i>
-                                        <p>Lockscreen</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <!-- /.sidebar-menu -->
             </div>
             <!-- /.sidebar -->
         </aside>
-
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
@@ -160,21 +93,19 @@ $result = mysqli_query($conn, "SELECT * FROM contact");
                 </div><!-- /.container-fluid -->
             </div>
             <!-- /.content-header -->
-
             <!-- Main content -->
             <!-- Example single danger button -->
-            <div class="btn-group">
+            <!-- <div class="btn-group">
                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Broadcast
                 </button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Email</a>
+                    <a class="dropdown-item" data-toggle="modal" data-target="#exampleModalEmail" href="#">Email</a>
                     <a class="dropdown-item" href="#">Telegram</a>
                     <a class="dropdown-item" href="#">Whatsapp</a>
-                    <!-- <div class="dropdown-divider"></div> -->
                 </div>
-            </div>
-            <div class="row">
+            </div> -->
+            <!-- <div class="row">
                 <table class="table table-striped" width="100%">
                     <thead class="thead-dark">
                         <tr>
@@ -185,19 +116,91 @@ $result = mysqli_query($conn, "SELECT * FROM contact");
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $a = 1; ?>
-                        <?php while ($row = mysqli_fetch_assoc($result)) : ?>
-                            <tr>
-                                <td><?= $a; ?></td>
-                                <td><?= $row["Email"]; ?></td>
-                                <td><?= $row["Number_tele"]; ?></td>
-                                <td><?= $row["Number_wa"]; ?></td>
-                            </tr>
-                            <?php $a++; ?>
-                        <?php endwhile; ?>
+                        
                     </tbody>
                 </table>
+            </div> -->
+            <div class="row">
+                <div class="col-lg-8">
+                    <table class="table table-striped">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">No</th>
+                                <th scope="col">Project</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $a = 1; ?>
+                            <?php while ($row = mysqli_fetch_assoc($result)) : ?>
+                                <tr>
+                                    <td>
+                                        <?= $a; ?>
+                                    </td>
+                                    <td>
+                                        <?= $row["project_name"]; ?></td>
+                                    <td>
+                                        <a href="<?= $row["id_project"]; ?>" class="badge badge-info" data-toggle="modal" data-target="#viewDetail">
+                                            View
+                                        </a>
+                                    </td>
+                                </tr>
+                                <?php $a++; ?>
+                            <?php endwhile; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
+            <hr>
+            <div class="col-sm-6">
+                <h5 class="m-0 text-dark"> Detail Project</h5>
+            </div>
+            <div class="row">
+                <div class="col-lg-8">
+                    <table class="table table-striped">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">No</th>
+                                <th scope="col">Project</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Whatsapp</th>
+                                <th scope="col">Telegram</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $a = 1; ?>
+                            <?php while ($row = mysqli_fetch_assoc($result)) : ?>
+                                <tr>
+                                    <td>
+                                        <?= $a; ?>
+                                    </td>
+                                    <td>
+                                        <?= $row["project_name"]; ?></td>
+                                    <td>
+                                        <a href="<?= $row["id_project"]; ?>" class="badge badge-info" data-toggle="modal" data-target="#viewDetail">
+                                            View
+                                        </a>
+                                    </td>
+                                </tr>
+                                <?php $a++; ?>
+                            <?php endwhile; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- <form id="form" method="post" action="../sendEmail.php">
+                <div class="form-group">
+                    <h3>Form kirim email</h3>
+                    <input id="email" name="email" type="text" class="form-control" value="<?php while ($getEmail = mysqli_fetch_array($result1)) {
+                                                                                                echo $getEmail["c.email"] . ",";
+                                                                                            } ?>" placeholder="Enter email">
+                    <input id="subject" name="subject" type="text" class="form-control" readonly value="Send Email">
+                    <input id="body" name="body" class="form-control">
+                </div>
+                <button type="submit" name="submit" class="btn btn-primary">Kirim</button>
+            </form> -->
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
@@ -208,7 +211,6 @@ $result = mysqli_query($conn, "SELECT * FROM contact");
                 <b>Version</b> 3.0.0-alpha
             </div>
         </footer>
-
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">
             <!-- Control sidebar content goes here -->
@@ -233,10 +235,9 @@ $result = mysqli_query($conn, "SELECT * FROM contact");
     <!-- Sparkline -->
     <script src="plugins/sparkline/jquery.sparkline.min.js"></script>
     <!-- jvectormap -->
-    <script src="plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
-    <script src="plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+
     <!-- jQuery Knob Chart -->
-    <script src="plugins/knob/jquery.knob.js"></script>
+
     <!-- daterangepicker -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
     <script src="plugins/daterangepicker/daterangepicker.js"></script>
@@ -257,3 +258,37 @@ $result = mysqli_query($conn, "SELECT * FROM contact");
 </body>
 
 </html>
+<div class="modal fade" id="projectTeamModal<?= $row['id_project']; ?>" tabindex="-1" role="dialog" aria-labelledby="projectTeamModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="projectTeamModal">Modal Send Email</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form" method="post" action="../sendEmail.php">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Email address</label>
+                        <!-- <input type="text" class="form-control" id="email" name="email" aria-describedby="emailHelp" value="<?php while ($getEmail = mysqli_fetch_array($result1)) {
+                                                                                                                                        echo $getEmail["Email"] . ",";
+                                                                                                                                    } ?>"> -->
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Subject</label>
+                        <input type="text" disabled class="form-control" id="subject" name="subject" value="Send Email">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Message</label>
+                        <input type="text" disabled class="form-control" id="body" name="body" value="Notifikasi Error">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Send Email</button>
+            </div>
+        </div>
+    </div>
+</div>

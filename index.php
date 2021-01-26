@@ -43,21 +43,19 @@
                 ?>
                 <form action="login.php" method="post" name="login">
                     <div class="form-group has-feedback">
-                        <input type="text" name="email" id="email" class="form-control" placeholder="Enter Email Address..">
-                        <span class="fa fa-envelope form-control-feedback"></span>
+                        <input type="text" name="username" id="username" class="form-control" placeholder="Enter username..">
                     </div>
                     <div class="form-group has-feedback">
                         <input type="password" id="password" name="password" class="form-control" placeholder="Password">
-                        <span class="fa fa-lock form-control-feedback"></span>
                     </div>
                     <div class="row">
-                        <div class="col-8">
+                        <!-- <div class="col-8">
                             <div class="checkbox icheck">
                                 <label>
                                     <input type="checkbox"> Remember Me
                                 </label>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- /.col -->
                         <div class="col-4">
                             <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
