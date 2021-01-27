@@ -5,17 +5,18 @@ if ($_SESSION['status'] != "login") {
 }
 $conn = mysqli_connect("localhost", "root", "", "rnd_notif");
 $result = mysqli_query($conn, "SELECT * FROM project");
-$query = "SELECT p.project_name,e.name,c.email,c.whatsapp,c.telegram FROM project as p 
-RIGHT JOIN project_employees as pe ON p.id_project = pe.id_project 
-LEFT JOIN employee as e ON pe.id_emp = e.id_emp 
-LEFT JOIN contact as c ON c.id_contact=e.id_contact";
-$result1 = mysqli_query($conn, $query);
-
-
-// while ($getEmail = mysqli_fetch_assoc($result2)) {
-//     var_dump($getEmail);
-// }
-// 
+//ambil data id dari url
+$id = $_GET["id"];
+$view = "SELECT p.project_name,e.name,c.email,c.whatsapp,c.telegram FROM project as p 
+        RIGHT JOIN project_employees as pe ON p.id_project = pe.id_project 
+        LEFT JOIN employee as e ON pe.id_emp = e.id_emp 
+        LEFT JOIN contact as c ON c.id_contact=e.id_contact WHERE p.id_project = $id";
+$result3 = mysqli_query($conn, $view);
+$getEmail = "SELECT p.id_project, c.email as email FROM project as p 
+        RIGHT JOIN project_employees as pe ON p.id_project = pe.id_project 
+        LEFT JOIN employee as e ON pe.id_emp = e.id_emp 
+        LEFT JOIN contact as c ON c.id_contact=e.id_contact WHERE p.id_project = $id";
+$res = mysqli_query($conn, $getEmail);
 ?>
 
 <!DOCTYPE html>
@@ -84,7 +85,7 @@ $result1 = mysqli_query($conn, $query);
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0 text-dark">Dashboard</h1>
+                            <h1 class="m-0 text-dark">Detail Project</h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
@@ -93,69 +94,75 @@ $result1 = mysqli_query($conn, $query);
                     </div><!-- /.row -->
                 </div><!-- /.container-fluid -->
             </div>
+            <hr>
             <div class="row">
                 <div class="col-lg-8">
                     <table class="table table-striped">
                         <thead class="thead-dark">
                             <tr>
-                                <th scope="col">No</th>
                                 <th scope="col">Project</th>
-                                <th scope="col">Action</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Whatsapp</th>
+                                <th scope="col">Telegram</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $a = 1; ?>
-                            <?php foreach ($result as $row) : ?>
+                            <?php while ($row = mysqli_fetch_assoc($result3)) : ?>
                                 <tr>
                                     <td>
-                                        <?= $a; ?>
+                                        <?= $row["project_name"]; ?>
                                     </td>
                                     <td>
-                                        <?= $row["project_name"]; ?></td>
+                                        <?= $row["name"]; ?>
+                                    </td>
                                     <td>
-
-                                        <a href="./viewProject.php?id=<?= $row["id_project"]; ?>" class="badge badge-info">
-                                            View
-                                        </a>
+                                        <?= $row["email"]; ?>
+                                    </td>
+                                    <td>
+                                        <?= $row["whatsapp"]; ?>
+                                    </td>
+                                    <td>
+                                        <?= $row["telegram"]; ?>
                                     </td>
                                 </tr>
-                                <?php $a++; ?>
-                            <?php endforeach; ?>
+                            <?php endwhile; ?>
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <hr>
-        </div>
-        <!-- /.content-wrapper -->
-        <!-- modal start -->
-        <div class="modal fade" id="viewDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Detail Project</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="" method="POST">
-                            <div class="form-group">
-                                <input type="text" class="form-control" readonly value="<?= $row["project_name"] ?>">
-                            </div>
-                            <div class="form-group">
-                                <input type="text" class="form-control" readonly value="<?= $row["project_name"] ?>">
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                <div class="col-lg-4">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#sendEmail">Email</button>
+                        <button type="button" class="btn btn-success">Whatsapp</button>
+                        <button type="button" class="btn btn-primary">Telegram</button>
                     </div>
                 </div>
             </div>
+            <hr>
+            <div class="col-lg-6">
+                <form id="form-send-message" method="POST" action="../sendEmail.php">
+                    <div class="form-group">
+                        <label for="">Email</label>
+                        <input id="email" name="email" type="text" class="form-control" readonly value="<?php
+                                                                                                        while ($row = mysqli_fetch_array($res)) {
+                                                                                                            $hasil = $row["email"];
+                                                                                                            echo $hasil . ",";
+                                                                                                        } ?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Subject</label>
+                        <input id="subject" name="subject" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Message</label>
+                        <textarea id="body" name="body" class="form-control"></textarea>
+                    </div>
+                    <button type="submit" name="submit" class="btn btn-primary">Send</button>
+                </form>
+            </div>
+
         </div>
-        <!-- modal end -->
+        <!-- /.content-wrapper -->
         <footer class="main-footer">
             <strong>Copyright &copy; 2020 <a href="http://adminlte.io">AdminLTE.io</a>.</strong>
             All rights reserved.
@@ -210,36 +217,29 @@ $result1 = mysqli_query($conn, $query);
 </body>
 
 </html>
-<div class="modal fade" id="projectTeamModal<?= $row['id_project']; ?>" tabindex="-1" role="dialog" aria-labelledby="projectTeamModal" aria-hidden="true">
+<div class="modal" tabindex="-1" role="dialog" id="sendEmail">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="projectTeamModal">Modal Send Email</h5>
+                <h5 class="modal-title">Modal title</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form id="form" method="post" action="../sendEmail.php">
+                <form action="">
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Email address</label>
-                        <!-- <input type="text" class="form-control" id="email" name="email" aria-describedby="emailHelp" value="<?php while ($getEmail = mysqli_fetch_array($result1)) {
-                                                                                                                                        echo $getEmail["Email"] . ",";
-                                                                                                                                    } ?>"> -->
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Subject</label>
-                        <input type="text" disabled class="form-control" id="subject" name="subject" value="Send Email">
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Message</label>
-                        <input type="text" disabled class="form-control" id="body" name="body" value="Notifikasi Error">
+                        <input type="text" readonly class="form-control" value="<?php
+                                                                                while ($row = mysqli_fetch_assoc($res)) {
+                                                                                    $hasil = $row["email"];
+                                                                                    echo $hasil . ",";
+                                                                                } ?>">
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Save changes</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Send Email</button>
             </div>
         </div>
     </div>

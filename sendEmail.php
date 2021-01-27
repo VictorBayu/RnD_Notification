@@ -185,7 +185,7 @@ $headers = "From: PT.PAL Indonesia <achmadhandika0@gmail.com> \r\n" .
   "Reply-To: PT.PAL Indonesia <achmadhandika0@gmail.com> \r\n" .
   'Content-type:text/html; charset-iso=8859-1' . "\r\n" .
   "X-Mailer: PHP/" . phpversion();
-if (mail($to_email, $subject, $body1, $headers)) {
+if (mail($to_email, $subject, $body, $headers)) {
   echo "Email successfully sent to $to_email ...";
 } else {
   echo "Email sending failed...";
