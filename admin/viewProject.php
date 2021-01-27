@@ -12,11 +12,38 @@ $view = "SELECT p.project_name,e.name,c.email,c.whatsapp,c.telegram FROM project
         LEFT JOIN employee as e ON pe.id_emp = e.id_emp 
         LEFT JOIN contact as c ON c.id_contact=e.id_contact WHERE p.id_project = $id";
 $result3 = mysqli_query($conn, $view);
-$getEmail = "SELECT p.id_project, c.email as email FROM project as p 
+$getEmail = "SELECT p.id_project,e.name as name, c.email as email, e.nip as nip FROM project as p 
         RIGHT JOIN project_employees as pe ON p.id_project = pe.id_project 
         LEFT JOIN employee as e ON pe.id_emp = e.id_emp 
         LEFT JOIN contact as c ON c.id_contact=e.id_contact WHERE p.id_project = $id";
 $res = mysqli_query($conn, $getEmail);
+
+function getData($column_name)
+{
+    global $getEmail, $conn, $id;
+    $count = "SELECT COUNT(*) as cnt FROM project as p 
+        RIGHT JOIN project_employees as pe ON p.id_project = pe.id_project 
+        LEFT JOIN employee as e ON pe.id_emp = e.id_emp 
+        LEFT JOIN contact as c ON c.id_contact=e.id_contact WHERE p.id_project = $id";
+    $res = mysqli_query($conn, $getEmail);
+    $rows = mysqli_query($conn, $count);
+    $lg = mysqli_fetch_assoc($rows)['cnt'];
+    $i = 0;
+    $str = "";
+    while ($row = mysqli_fetch_array($res)) {
+        $str = $str . $row[$column_name];
+        if ($i + 1 < (int)$lg) {
+            $str = $str . ", ";
+        }
+        $i++;
+    }
+    echo $str;
+}
+$getMessage = "SELECT * FROM formatmessage";
+$exec = mysqli_query($conn, $getMessage);
+if (!$exec) {
+    die(mysqli_error($conn));
+}
 ?>
 
 <!DOCTYPE html>
@@ -130,35 +157,44 @@ $res = mysqli_query($conn, $getEmail);
                         </tbody>
                     </table>
                 </div>
-                <div class="col-lg-4">
-                    <div class="btn-group" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#sendEmail">Email</button>
-                        <button type="button" class="btn btn-success">Whatsapp</button>
-                        <button type="button" class="btn btn-primary">Telegram</button>
-                    </div>
-                </div>
             </div>
             <hr>
+
             <div class="col-lg-6">
                 <form id="form-send-message" method="POST" action="../sendEmail.php">
                     <div class="form-group">
-                        <label for="">Email</label>
-                        <input id="email" name="email" type="text" class="form-control" readonly value="<?php
-                                                                                                        while ($row = mysqli_fetch_array($res)) {
-                                                                                                            $hasil = $row["email"];
-                                                                                                            echo $hasil . ",";
-                                                                                                        } ?>">
+                        <label>NIP</label>
+                        <input id="nip" name="nip" type="text" class="form-control" readonly value="<?php getData('nip') ?>">
                     </div>
                     <div class="form-group">
-                        <label for="">Subject</label>
+                        <label>Email</label>
+                        <input id="email" name="email" type="text" class="form-control" readonly value=" <?php getData('email') ?> ">
+                    </div>
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input id="name" name="name" type="text" class="form-control" readonly value=" <?php getData('name') ?> ">
+                    </div>
+                    <div class="form-group">
+                        <label>Subject</label>
                         <input id="subject" name="subject" type="text" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="">Message</label>
-                        <textarea id="body" name="body" class="form-control"></textarea>
+                        <label>Message</label>
+                        <textarea id="body" name="body" class="form-control" readonly><?php if (mysqli_num_rows($exec) > 0) {
+                                                                                            while ($rowData = mysqli_fetch_array($exec)) {
+                                                                                                echo $rowData["message"];
+                                                                                            }
+                                                                                        } ?></textarea>
                     </div>
-                    <button type="submit" name="submit" class="btn btn-primary">Send</button>
-                </form>
+                    <!-- <button type="submit" name="submit" class="btn btn-primary">Send</button> -->
+                    <div class="col-4">
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <button type="submit" name="submit" class="btn btn-danger">Send Email</button>
+                            <button type="button" class="btn btn-success">Send Whatsapp</button>
+                            <button type="button" class="btn btn-primary">Send Telegram</button>
+                        </div>
+                    </div>
+                </form><br>
             </div>
 
         </div>

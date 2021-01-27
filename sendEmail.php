@@ -2,6 +2,9 @@
 $to_email = $_POST['email'];
 $subject = $_POST['subject'];
 $body = $_POST['body'];
+$nip = $_POST['nip'];
+$name = $_POST['name'];
+
 $body1 = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office" style="width:100%;font-family:arial, "helvetica neue", helvetica, sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;padding:0;Margin:0">
  <head> 
@@ -121,6 +124,12 @@ a[x-apple-data-detectors] {
                       <td align="left" style="padding:0;Margin:0"><h3 style="Margin:0;line-height:24px;mso-line-height-rule:exactly;font-family:arial, "helvetica neue", helvetica, sans-serif;font-size:20px;font-style:normal;font-weight:normal;color:#666666">Test Send Email</h3></td> 
                      </tr>
                      <tr style="border-collapse:collapse"> 
+                      <td align="left" style="padding:0;Margin:0;padding-top:15px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:14px;font-family:arial, "helvetica neue", helvetica, sans-serif;line-height:21px;color:#999999">' . $body . '</p></td> 
+                     </tr> 
+                     <tr style="border-collapse:collapse"> 
+                      <td align="left" style="padding:0;Margin:0;padding-top:15px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:14px;font-family:arial, "helvetica neue", helvetica, sans-serif;line-height:21px;color:#999999"></p>NIP : ' . $nip . '<br>Name : ' . $name . '</td> 
+                     </tr>
+                     <tr style="border-collapse:collapse"> 
                       <td align="left" style="padding:0;Margin:0;padding-top:15px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:14px;font-family:arial, "helvetica neue", helvetica, sans-serif;line-height:21px;color:#999999">Best regards,</p><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:14px;font-family:arial, "helvetica neue", helvetica, sans-serif;line-height:21px;color:#999999">Team Project</p></td> 
                      </tr> 
                    </table></td> 
@@ -185,7 +194,7 @@ $headers = "From: PT.PAL Indonesia <achmadhandika0@gmail.com> \r\n" .
   "Reply-To: PT.PAL Indonesia <achmadhandika0@gmail.com> \r\n" .
   'Content-type:text/html; charset-iso=8859-1' . "\r\n" .
   "X-Mailer: PHP/" . phpversion();
-if (mail($to_email, $subject, $body, $headers)) {
+if (mail($to_email, $subject, $body1, $headers)) {
   echo "Email successfully sent to $to_email ...";
 } else {
   echo "Email sending failed...";
