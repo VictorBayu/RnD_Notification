@@ -12,7 +12,7 @@ $view = "SELECT p.project_name,e.name,c.email,c.whatsapp,c.telegram FROM project
         LEFT JOIN employee as e ON pe.id_emp = e.id_emp 
         LEFT JOIN contact as c ON c.id_contact=e.id_contact WHERE p.id_project = $id";
 $result3 = mysqli_query($conn, $view);
-$getEmail = "SELECT p.id_project,e.name as name, c.email as email, e.nip as nip FROM project as p 
+$getEmail = "SELECT p.id_project,e.name as name, c.email as email, e.nip as nip, c.whatsapp as wa FROM project as p 
         RIGHT JOIN project_employees as pe ON p.id_project = pe.id_project 
         LEFT JOIN employee as e ON pe.id_emp = e.id_emp 
         LEFT JOIN contact as c ON c.id_contact=e.id_contact WHERE p.id_project = $id";
@@ -37,12 +37,28 @@ function getData($column_name)
         }
         $i++;
     }
-    echo $str;
+    return $str;
 }
+
 $getMessage = "SELECT * FROM formatmessage";
 $exec = mysqli_query($conn, $getMessage);
 if (!$exec) {
     die(mysqli_error($conn));
+}
+
+$mode = "";
+
+if (isset($_POST['btn_email'])) {
+    if (isset($_POST["nip"])) {
+        $ambilnip = $_POST["nip"];
+    }
+    if (isset($_POST["email"])) {
+        $ambilemail = $_POST["email"];
+    }
+    if (isset($_POST["name"])) {
+        $ambilname = $_POST["name"];
+    }
+    $mode = "Email";
 }
 ?>
 
@@ -157,22 +173,68 @@ if (!$exec) {
                         </tbody>
                     </table>
                 </div>
+                <div class="col-4">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <form method="POST">
+                            <input type="text" name="nip" hidden value="<?php echo getData('nip') ?> ">
+                            <input type="text" name="email" hidden value="<?php echo getData('email') ?> ">
+                            <input type="text" name="name" hidden value="<?php echo getData('name') ?> ">
+                            <button type="submit" name="btn_email" id="btn_email" class="btn btn-danger">Email</button>
+                        </form>
+                        <form method="POST">
+                            <button type="submit" class="btn btn-success" name="btn_wa" id="btn_wa">Whatsapp</button>
+                            <?php
+                            $nip = "";
+                            $nama = "";
+                            $noWA = "";
+                            if (isset($_POST['btn_wa'])) {
+                                $nip = getData('nip');
+                                $nama = getData('name');
+                                $noWA = getData('wa');
+                                $mode = "WhatsApp";
+                            }
+                            ?>
+                        </form>
+                        <button type="button" class="btn btn-primary">Telegram</button>
+                    </div>
+                </div>
             </div>
             <hr>
-
             <div class="col-lg-6">
-                <form id="form-send-message" method="POST" action="../sendEmail.php">
+                <form id="form-send-message" method="POST" action="">
+                    <input type="text" id="mode" name="mode" value="<?php echo $mode ?>" hidden>
+
                     <div class="form-group">
                         <label>NIP</label>
-                        <input id="nip" name="nip" type="text" class="form-control" readonly value="<?php getData('nip') ?>">
+                        <input id="nip" name="nip" type="text" class="form-control" readonly value="<?php if (empty($ambilnip)) {
+                                                                                                        echo "Empty";
+                                                                                                    } else {
+                                                                                                        echo  $ambilnip;
+                                                                                                    } ?>">
                     </div>
                     <div class="form-group">
-                        <label>Email</label>
-                        <input id="email" name="email" type="text" class="form-control" readonly value=" <?php getData('email') ?> ">
+                        <label> Tujuan <?php echo (empty($mode)) ? "" : $mode; ?></label>
+                        <input id="email" name="email" type="text" class="form-control" readonly value=" <?php if (empty($ambilnip) && empty($noWA)) {
+                                                                                                                echo "Empty";
+                                                                                                            } else {
+                                                                                                                if (!empty($ambilemail)) {
+                                                                                                                    echo $ambilemail;
+                                                                                                                }
+                                                                                                                if (!empty($noWA)) {
+                                                                                                                    echo $noWA;
+                                                                                                                } else {
+                                                                                                                    echo "Empty";
+                                                                                                                }
+                                                                                                            } ?> ">
+
                     </div>
                     <div class="form-group">
                         <label>Name</label>
-                        <input id="name" name="name" type="text" class="form-control" readonly value=" <?php getData('name') ?> ">
+                        <input id="name" name="name" type="text" class="form-control" readonly value=" <?php if (empty($ambilname)) {
+                                                                                                            echo "Empty";
+                                                                                                        } else {
+                                                                                                            echo  $ambilname;
+                                                                                                        } ?> ">
                     </div>
                     <div class="form-group">
                         <label>Subject</label>
@@ -187,13 +249,21 @@ if (!$exec) {
                                                                                         } ?></textarea>
                     </div>
                     <!-- <button type="submit" name="submit" class="btn btn-primary">Send</button> -->
-                    <div class="col-4">
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                            <button type="submit" name="submit" class="btn btn-danger">Send Email</button>
-                            <button type="button" class="btn btn-success">Send Whatsapp</button>
-                            <button type="button" class="btn btn-primary">Send Telegram</button>
-                        </div>
-                    </div>
+                    <?php if (isset($_POST['send'])) {
+                        $m = $_POST['mode'];
+                        echo "Kirim via " . $m;
+                        if ($m == "Email") {
+                            # code...
+                        } else if ($m == "WhatsApp") {
+                            # code...
+                        } else if ($m == "Telegram") {
+                            # code...
+                        } else {
+                            echo " Not Selected";
+                        }
+                    } ?>
+                    <button type="submit" name="send" id="send" class="btn btn-primary">SEND</button>
+
                 </form><br>
             </div>
 

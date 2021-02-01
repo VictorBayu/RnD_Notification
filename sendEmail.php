@@ -195,7 +195,17 @@ $headers = "From: PT.PAL Indonesia <achmadhandika0@gmail.com> \r\n" .
   'Content-type:text/html; charset-iso=8859-1' . "\r\n" .
   "X-Mailer: PHP/" . phpversion();
 if (mail($to_email, $subject, $body1, $headers)) {
-  echo "Email successfully sent to $to_email ...";
+  echo "
+      <script>
+        alert('Email successfully sent to $to_email...');
+        document.location.href = '/admin/index.php';
+      </script>
+  ";
 } else {
-  echo "Email sending failed...";
+  echo "
+    <script>
+      alert('Email sending failed');
+      document.location.href = '/admin/index.php';
+    </script>
+  ";
 }
