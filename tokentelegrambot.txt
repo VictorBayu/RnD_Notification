@@ -1,0 +1,3 @@
+api token PT_PAL_bot : https://api.telegram.org/bot1389960601:AAGAAqmhYZQmbtfsVbRToncEb9ERr8l1IG4/getUpdates
+
+curl -d url=https://3f065120b12a.ngrok.io/send_bot_tele.php -X POST https://api.telegram.org/bot1389960601:AAGAAqmhYZQmbtfsVbRToncEb9ERr8l1IG4/setWebhook
