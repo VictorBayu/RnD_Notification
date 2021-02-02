@@ -298,13 +298,19 @@ if (!$exec) {
                     if (isset($_POST['send'])) {
                         $m = $_POST['mode'];
                         if ($m == "Email") {
-                            kirimEmail();
+                            $tmp_nip = getDataArray('nip');
+                            $tmp_nm = getDataArray('name');
+                            $tmp_email = getDataArray('email');
+                            for ($i = 0; $i < sizeof($tmp_email); $i++) {
+                                //$pesan = $_POST['body'] . $_POST['subject'] . $tmp_nip[$i] . $tmp_nm[$i];
+                                kirimEmail($tmp_email[$i], $_POST['subject'], $_POST['body'], $tmp_nip[$i], $tmp_nm[$i]);
+                            }
                         } else if ($m == "WhatsApp") {
                             $tmp_nip = getDataArray('nip');
                             $tmp_nm = getDataArray('name');
                             $tmp_wa = getDataArray('wa');
-                            for ($i=0; $i < sizeof($tmp_wa); $i++) { 
-                                $ms = "\nNIP: ".$tmp_nip[$i]."\nNama: ".$tmp_nm[$i]."\n\n".$_POST['body'];
+                            for ($i = 0; $i < sizeof($tmp_wa); $i++) {
+                                $ms = "\nNIP: " . $tmp_nip[$i] . "\nNama: " . $tmp_nm[$i] . "\n\n" . $_POST['body'];
                                 sendMessage($tmp_wa[$i], "$ms");
                             }
                         } else if ($m == "Telegram") {
