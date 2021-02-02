@@ -292,12 +292,10 @@ if (!$exec) {
                         $m = $_POST['mode'];
                         echo "Kirim via " . $m;
                         if ($m == "Email") {
-                            foreach (getDataArray('email') as $row) {
-                                # code
-                            }
+                            kirimEmail();
                         } else if ($m == "WhatsApp") {
                             foreach (getDataArray('wa') as $row) {
-                                # code..
+                                sendMessage($row, "INI %0 TES KU");
                             }
                         } else if ($m == "Telegram") {
                             # code...

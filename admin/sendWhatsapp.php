@@ -25,7 +25,7 @@ function sendMessage($phone, $message)
     curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
     $result = curl_exec($curl);
-    curl_close($curl);
+    // curl_close($curl);
 }
 
 function getDeviceInfo()
@@ -61,39 +61,3 @@ function changeSender($phone)
     echo "<pre>";
     print_r($result);
 }
-
-?>
-<!-- <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEST_WHATSAPP</title>
-</head>
-
-<body>
-    <div>
-        <a href=""> Get Sender Device </a>
-    </div>
-    <div>
-        <form action="" method="post">
-            <br>
-            <input type="text" id="phone" name="phone">
-            <br>
-            <input type="text" id="message" name="message">
-            <br>
-            <input type="submit" id="submit" name="submit" value="SEND"> -->
-<?php
-// if (isset($_POST['submit'])) {
-//     $phone = $_POST['phone'];
-//     $message = $_POST['message'];
-//     sendMessage($phone, $message);
-//     echo "Pesan Terkirim";
-// }
-?>
-<!-- </form>
-    </div>
-</body>
-
-</html> -->
