@@ -21,7 +21,8 @@ p.id_project,e.name as name,
 c.email as email, 
 e.nip as nip, 
 c.whatsapp as wa, 
-c.telegram as tele 
+c.telegram as tele,
+c.tele_userID as teleID 
 FROM project as p 
         RIGHT JOIN project_employees as pe ON p.id_project = pe.id_project 
         LEFT JOIN employee as e ON pe.id_emp = e.id_emp 
@@ -309,12 +310,18 @@ if (!$exec) {
                             $tmp_nip = getDataArray('nip');
                             $tmp_nm = getDataArray('name');
                             $tmp_wa = getDataArray('wa');
-                            for ($i = 0; $i < sizeof($tmp_wa); $i++) {
-                                $ms = "\nNIP: " . $tmp_nip[$i] . "\nNama: " . $tmp_nm[$i] . "\n\n" . $_POST['body'];
+                            for ($i=0; $i < sizeof($tmp_wa); $i++) { 
+                                $ms = $_POST['body']."\n\nNIP: ".$tmp_nip[$i]."\nNama: ".$tmp_nm[$i];
                                 sendMessage($tmp_wa[$i], "$ms");
                             }
                         } else if ($m == "Telegram") {
-                            # code...
+                            $tmp_nip = getDataArray('nip');
+                            $tmp_nm = getDataArray('name');
+                            $tmp_teleID = getDataArray('teleID');
+                            for ($i=0; $i < sizeof($tmp_teleID); $i++) { 
+                                $ms = $_POST['body']."\n\nNIP: ".$tmp_nip[$i]."\nNama: ".$tmp_nm[$i];
+                                kirimTele($tmp_teleID[$i], "$ms");
+                            }
                         } else {
                             echo " Not Selected";
                         }
