@@ -1,23 +1,26 @@
 <?php
+function kirimTele()
+{
+    if (isset($_POST['submit'])) {
 
-if (isset($_POST['submit'])) {
+        $url = "https://api.telegram.org/bot1389960601:AAGAAqmhYZQmbtfsVbRToncEb9ERr8l1IG4/sendMessage?chat_id=" . $_POST['chatid'] . "&parse_mode=HTML&text=" . $_POST['pesan'];
+        $curlHandle = curl_init();
+        curl_setopt($curlHandle, CURLOPT_URL, $url);
+        curl_setopt($curlHandle, CURLOPT_HEADER, 0);
+        curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($curlHandle, CURLOPT_TIMEOUT, 30);
+        curl_setopt($curlHandle, CURLOPT_POST, 1);
+        $results = curl_exec($curlHandle);
+        curl_close($curlHandle);
 
-    $url = "https://api.telegram.org/bot1389960601:AAGAAqmhYZQmbtfsVbRToncEb9ERr8l1IG4/sendMessage?chat_id=" . $_POST['chatid'] . "&parse_mode=HTML&text=" . $_POST['pesan'];
-    $curlHandle = curl_init();
-    curl_setopt($curlHandle, CURLOPT_URL, $url);
-    curl_setopt($curlHandle, CURLOPT_HEADER, 0);
-    curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
-    curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 0);
-    curl_setopt($curlHandle, CURLOPT_TIMEOUT, 30);
-    curl_setopt($curlHandle, CURLOPT_POST, 1);
-    $results = curl_exec($curlHandle);
-    curl_close($curlHandle);
-
-    echo "Pesan Telah Terkirim";
+        echo "Pesan Telah Terkirim";
+    }
 }
+
 ?>
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -34,4 +37,4 @@ if (isset($_POST['submit'])) {
     </form>
 </body>
 
-</html>
+</html> -->

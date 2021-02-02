@@ -1,11 +1,13 @@
 <?php
-$to_email = $_POST['email'];
-$subject = $_POST['subject'];
-$body = $_POST['body'];
-$nip = $_POST['nip'];
-$name = $_POST['name'];
+function kirimEmail()
+{
+  $to_email = $_POST['email'];
+  $subject = $_POST['subject'];
+  $body = $_POST['body'];
+  $nip = $_POST['nip'];
+  $name = $_POST['name'];
 
-$body1 = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  $body1 = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office" style="width:100%;font-family:arial, "helvetica neue", helvetica, sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;padding:0;Margin:0">
  <head> 
   <meta charset="UTF-8"> 
@@ -190,22 +192,23 @@ a[x-apple-data-detectors] {
   </div>  
  </body>
 </html>';
-$headers = "From: PT.PAL Indonesia <achmadhandika0@gmail.com> \r\n" .
-  "Reply-To: PT.PAL Indonesia <achmadhandika0@gmail.com> \r\n" .
-  'Content-type:text/html; charset-iso=8859-1' . "\r\n" .
-  "X-Mailer: PHP/" . phpversion();
-if (mail($to_email, $subject, $body1, $headers)) {
-  echo "
+  $headers = "From: PT.PAL Indonesia <achmadhandika0@gmail.com> \r\n" .
+    "Reply-To: PT.PAL Indonesia <achmadhandika0@gmail.com> \r\n" .
+    'Content-type:text/html; charset-iso=8859-1' . "\r\n" .
+    "X-Mailer: PHP/" . phpversion();
+  if (mail($to_email, $subject, $body1, $headers)) {
+    echo "
       <script>
         alert('Email successfully sent to $to_email...');
         document.location.href = '/admin/index.php';
       </script>
   ";
-} else {
-  echo "
+  } else {
+    echo "
     <script>
       alert('Email sending failed');
       document.location.href = '/admin/index.php';
     </script>
   ";
+  }
 }
