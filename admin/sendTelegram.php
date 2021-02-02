@@ -63,7 +63,3 @@ function checkDB() {
         }
     }
 }
-
-checkDB();
-
-?>
