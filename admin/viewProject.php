@@ -15,7 +15,14 @@ $view = "SELECT p.project_name,e.name,c.email,c.whatsapp,c.telegram FROM project
         LEFT JOIN employee as e ON pe.id_emp = e.id_emp 
         LEFT JOIN contact as c ON c.id_contact=e.id_contact WHERE p.id_project = $id";
 $result3 = mysqli_query($conn, $view);
-$getEmail = "SELECT p.id_project,e.name as name, c.email as email, e.nip as nip, c.whatsapp as wa, c.telegram as tele FROM project as p 
+
+$getEmail = "SELECT 
+p.id_project,e.name as name, 
+c.email as email, 
+e.nip as nip, 
+c.whatsapp as wa, 
+c.telegram as tele 
+FROM project as p 
         RIGHT JOIN project_employees as pe ON p.id_project = pe.id_project 
         LEFT JOIN employee as e ON pe.id_emp = e.id_emp 
         LEFT JOIN contact as c ON c.id_contact=e.id_contact WHERE p.id_project = $id";
@@ -290,12 +297,15 @@ if (!$exec) {
                     <?php
                     if (isset($_POST['send'])) {
                         $m = $_POST['mode'];
-                        echo "Kirim via " . $m;
                         if ($m == "Email") {
                             kirimEmail();
                         } else if ($m == "WhatsApp") {
-                            foreach (getDataArray('wa') as $row) {
-                                sendMessage($row, "INI %0 TES KU");
+                            $tmp_nip = getDataArray('nip');
+                            $tmp_nm = getDataArray('name');
+                            $tmp_wa = getDataArray('wa');
+                            for ($i=0; $i < sizeof($tmp_wa); $i++) { 
+                                $ms = "\nNIP: ".$tmp_nip[$i]."\nNama: ".$tmp_nm[$i]."\n\n".$_POST['body'];
+                                sendMessage($tmp_wa[$i], "$ms");
                             }
                         } else if ($m == "Telegram") {
                             # code...

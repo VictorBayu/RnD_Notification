@@ -64,6 +64,4 @@ function checkDB() {
     }
 }
 
-checkDB();
-
 ?>
