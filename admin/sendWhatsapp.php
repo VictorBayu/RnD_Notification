@@ -1,7 +1,7 @@
 <?php
 $curl = curl_init();
-$token = "E7fBznak3dMNn8r7IAE8HEZopcXYSeuSQTQCnJ1i4RDgidYvy47J0zhoUiwVuNpJ";
-$domain = "https://teras.wablas.com";
+$token = "4hgvjjxIPLHI5n1LYG2U0s2wdw4vhADZmZzIkgnxDCR1kg07EwwP3ovGiA9u98Ps";
+$domain = "https://cepogo.wablas.com";
 
 
 function sendMessage($phone, $message)
