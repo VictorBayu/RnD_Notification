@@ -1,15 +1,19 @@
-<?php 
+<?php
 $curl = curl_init();
 $token = "E7fBznak3dMNn8r7IAE8HEZopcXYSeuSQTQCnJ1i4RDgidYvy47J0zhoUiwVuNpJ";
 $domain = "https://teras.wablas.com";
 
-function sendMessage($phone, $message) {
+
+function sendMessage($phone, $message)
+{
     global $token, $curl, $domain;
     $data = [
         'phone' => $phone,
         'message' => $message,
     ];
-    curl_setopt($curl, CURLOPT_HTTPHEADER,
+    curl_setopt(
+        $curl,
+        CURLOPT_HTTPHEADER,
         array(
             "Authorization: $token",
         )
@@ -24,19 +28,23 @@ function sendMessage($phone, $message) {
     curl_close($curl);
 }
 
-function getDeviceInfo() {
+function getDeviceInfo()
+{
     global $domain, $token;
     // $qr =  "$domain/generate/index.php?token=$token&url=aHR0cHM6Ly9jb25zb2xlLndhYmxhcy5jb20";
     $info = "$domain/api/device/info?token=$token";
     return $info;
 }
 
-function changeSender($phone) {
+function changeSender($phone)
+{
     global $token, $curl, $domain;
     $data = [
         'phone' => $phone,
     ];
-    curl_setopt($curl, CURLOPT_HTTPHEADER,
+    curl_setopt(
+        $curl,
+        CURLOPT_HTTPHEADER,
         array(
             "Authorization: $token",
         )
@@ -55,16 +63,18 @@ function changeSender($phone) {
 }
 
 ?>
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TEST_WHATSAPP</title>
 </head>
+
 <body>
     <div>
-        <a href="<?php echo getDeviceInfo() ?>"> Get Sender Device </a>
+        <a href=""> Get Sender Device </a>
     </div>
     <div>
         <form action="" method="post">
@@ -73,16 +83,17 @@ function changeSender($phone) {
             <br>
             <input type="text" id="message" name="message">
             <br>
-            <input type="submit" id="submit" name="submit" value="SEND">
-            <?php 
-                if (isset($_POST['submit'])) {
-                    $phone = $_POST['phone'];
-                    $message = $_POST['message'];
-                    sendMessage($phone, $message);
-                    echo "Pesan Terkirim";
-                }
-            ?>
-        </form>
+            <input type="submit" id="submit" name="submit" value="SEND"> -->
+<?php
+// if (isset($_POST['submit'])) {
+//     $phone = $_POST['phone'];
+//     $message = $_POST['message'];
+//     sendMessage($phone, $message);
+//     echo "Pesan Terkirim";
+// }
+?>
+<!-- </form>
     </div>
 </body>
-</html>
+
+</html> -->
